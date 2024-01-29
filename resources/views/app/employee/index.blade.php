@@ -3,11 +3,19 @@
 @section('title', 'Employee')
 
 @section('content')
+
+{{-- <style>
+    .custom-size-popup {
+        width: 400px; /* Atur lebar sesuai kebutuhan */
+        height: auto; /* Atur tinggi atau biarkan otomatis */
+    }
+</style> --}}
+
 @if (session('status'))
-    @include('_partials.alert-box', [
-        'status' => session('status'),
-        'message' => session('message'),
-    ])
+@include('_partials.alert-box', [
+'status' => session('status'),
+'message' => session('message'),
+])
 @endif
 
 <div class="card">
@@ -32,6 +40,7 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function ($) {
         $('#tabelku').DataTable({
@@ -72,18 +81,64 @@
                 render: function(data, type, row) {
                     return `
                     <div class="dropdown">
-                        <a class="btn btn-primary dropdown-toggle bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border:none; box-shadow:none;">
-                            <i class="fas fa-ellipsis-v" style="color: #000;"></i>
-                        </a>
+                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"">
+                            <i class="mdi mdi-dots-vertical mdi-24px"></i>
+                        </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Detail</a></li>
                             <li><a class="dropdown-item" href="employee/${row.id}/edit" title="Edit">Edit</a></li>
-                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                            <li><a class="dropdown-item delete" data-id="${row.id}" href="#" title="Delete">Delete</a></li>
                         </ul>
                     </div>
                     `}
                 },
                 ]
+            });
+            
+            $(document).on('click', '.delete', function (e) {
+                e.preventDefault();
+                
+                const id = $(this).data('id');
+                
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Apakah Anda yakin?',
+                    text: 'Data akan dihapus!',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        popup: 'custom-size-popup',
+                        confirmButton: 'btn btn-sm',
+                        cancelButton: 'btn btn-sm',
+                    },
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: `employee/${id}`, 
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                'content')
+                            },
+                            success: function (response) {
+                                Swal.fire({
+                                    title: 'Berhasil!',
+                                    text: 'Data berhasil dihapus.',
+                                    icon: 'success',
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            },
+                            error: function (xhr, status, error) {
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: 'Gagal menghapus data.',
+                                    icon: 'error',
+                                });
+                            },
+                        });
+                    }
+                });
             });
         });
     </script>

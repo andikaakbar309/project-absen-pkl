@@ -42,16 +42,16 @@
         </div>
         <div class="card-body">
             <input type="hidden" id="id" name="id" value="{{ $data->id ?? '' }}" />
-            <div class="form-floating mb-5">
+            <div class="form-floating mb-4">
                 <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $data->name ?? '') }}" placeholder="" />
                 <label for="name">Nama *</label>
             </div>
-            <div class="form-floating mb-5">
+            <div class="form-floating mb-4">
                 <input type="text" class="form-control" id="position" name="position" value="{{ old('position', $data->position ?? '') }}" placeholder="" />
                 <label for="position">Posisi *</label>
             </div>
-            <div class="form-floating mb-5 mt-5">
-                <h6 class="mb-5">Photo (Opsional)</h6>
+            <div class="form-floating mb-4 mt-5">
+                <h6 class="mb-4">Photo (Opsional)</h6>
                 <input type="hidden" name="old_photo" value="{{ $data->photo ?? '' }}">
                 <input type="file" style="display:none;" name="photo" id="photo" accept="image/*" />
                 <div id="preview" style="position:relative;" class="d-flex flex-column justify-content-center text-center w-100">
@@ -65,11 +65,11 @@
                     </div>
                 </div>
             </div>
-            <div class="form-floating mb-5">
+            <div class="form-floating mb-4">
                 <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $data->address ?? '') }}" placeholder="" />
                 <label for="address">Alamat *</label>
             </div>
-            <div class="form-floating mb-5">
+            <div class="form-floating mb-4">
                 <input type="number" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $data->phone_number ?? '') }}" placeholder="" />
                 <label for="phone_number">No. Telp *</label>
             </div>
@@ -85,18 +85,28 @@
 </form>
 
 <script>
-    $(document).ready(function() {
-        var isEdit = $('#id').val() != '';
-            $('#upload-button').on("click", (event) => {
-                event.preventDefault();
-                $('input[name=photo]').click();
-            });
-            $('input[name=photo]').on("change", event => {
-                const file = event.target.files[0];
-                $('#preview-image').attr('src', URL.createObjectURL(file));
-            });
-        }
-        loadEvents();
+    document.addEventListener("DOMContentLoaded", function () {
+        const uploadButton = document.getElementById("upload-button");
+        const photoInput = document.getElementById("photo");
+        
+        uploadButton.addEventListener("click", function () {
+            photoInput.click();
+        });
+        
+        photoInput.addEventListener("change", function () {
+            const previewImage = document.getElementById("preview-image");
+            const file = this.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
     });
 </script>
 @endsection

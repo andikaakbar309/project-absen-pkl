@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('position');
             $table->string('photo')->nullable();
             $table->string('address');
-            $table->string('phone_number', 15); // Set the length of phone_number to 15
+            $table->string('phone_number', 15);
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }
