@@ -34,11 +34,11 @@
 
   <!-- Transactions -->
   <div class="col-lg-8">
-    <div class="card">
+    <div class="card h-100">
       <div class="card-header">
         <div class="d-flex align-items-center justify-content-between">
           <h5 class="card-title m-0 me-2">Kehadiran</h5>
-          <div class="dropdown">
+          {{-- <div class="dropdown">
             <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="mdi mdi-dots-vertical mdi-24px"></i>
             </button>
@@ -47,30 +47,17 @@
               <a class="dropdown-item" href="javascript:void(0);">Share</a>
               <a class="dropdown-item" href="javascript:void(0);">Update</a>
             </div>
-          </div>
+          </div> --}}
         </div>
-        <p class="mt-3"><span class="fw-medium">Total 48.5% kehadiran</span> 😎 bulan ini</p>
+        <p class="mt-3"><span class="fw-medium">Total 48.5% kehadiranmu</span> bulan ini 😎</p>
       </div>
       <div class="card-body">
         <div class="row g-3">
           <div class="col-md-3 col-6">
             <div class="d-flex align-items-center">
               <div class="avatar">
-                <div class="avatar-initial bg-primary rounded shadow">
-                  <i class="mdi mdi-trending-up mdi-24px"></i>
-                </div>
-              </div>
-              <div class="ms-3">
-                <div class="small mb-1">Sakit</div>
-                <h5 class="mb-0">5</h5>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3 col-6">
-            <div class="d-flex align-items-center">
-              <div class="avatar">
                 <div class="avatar-initial bg-success rounded shadow">
-                  <i class="mdi mdi-account-outline mdi-24px"></i>
+                  <i class="mdi mdi-briefcase-check-outline mdi-24px"></i>
                 </div>
               </div>
               <div class="ms-3">
@@ -82,8 +69,21 @@
           <div class="col-md-3 col-6">
             <div class="d-flex align-items-center">
               <div class="avatar">
+                <div class="avatar-initial bg-secondary rounded shadow">
+                  <i class="mdi mdi-emoticon-sick-outline mdi-24px"></i>
+                </div>
+              </div>
+              <div class="ms-3">
+                <div class="small mb-1">Sakit</div>
+                <h5 class="mb-0">5</h5>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-6">
+            <div class="d-flex align-items-center">
+              <div class="avatar">
                 <div class="avatar-initial bg-warning rounded shadow">
-                  <i class="mdi mdi-cellphone-link mdi-24px"></i>
+                  <i class="mdi mdi-briefcase-clock-outline mdi-24px"></i>
                 </div>
               </div>
               <div class="ms-3">
@@ -95,12 +95,12 @@
           <div class="col-md-3 col-6">
             <div class="d-flex align-items-center">
               <div class="avatar">
-                <div class="avatar-initial bg-info rounded shadow">
-                  <i class="mdi mdi-currency-usd mdi-24px"></i>
+                <div class="avatar-initial bg-danger rounded shadow">
+                  <i class="mdi mdi-briefcase-off-outline mdi-24px"></i>
                 </div>
               </div>
               <div class="ms-3">
-                <div class="small mb-1">Alpa</div>
+                <div class="small mb-1">Bolos</div>
                 <h5 class="mb-0">2</h5>
               </div>
             </div>
@@ -111,7 +111,7 @@
   </div>
   <!--/ Transactions -->
 
-  <!-- Weekly Overview Chart -->
+  {{-- <!-- Weekly Overview Chart -->
   <div class="col-xl-4 col-md-6">
     <div class="card">
       <div class="card-header">
@@ -589,7 +589,7 @@
       </div>
     </div>
   </div>
-  <!-- Deposit / Withdraw -->
+  <!-- Deposit / Withdraw --> --}}
 
   <!-- Data Tables -->
   <div class="col-12">
@@ -598,11 +598,9 @@
         <table class="table">
           <thead class="table-light">
             <tr>
-              <th class="text-truncate">User</th>
+              <th class="text-truncate">Nama</th>
               <th class="text-truncate">Email</th>
-              <th class="text-truncate">Role</th>
-              <th class="text-truncate">Age</th>
-              <th class="text-truncate">Salary</th>
+              <th class="text-truncate">Jabatan</th>
               <th class="text-truncate">Status</th>
             </tr>
           </thead>
@@ -615,17 +613,14 @@
                   </div>
                   <div>
                     <h6 class="mb-0 text-truncate">Jordan Stevenson</h6>
-                    <small class="text-truncate">@amiccoo</small>
                   </div>
                 </div>
               </td>
               <td class="text-truncate">susanna.Lind57@gmail.com</td>
-              <td class="text-truncate"><i class="mdi mdi-laptop mdi-24px text-danger me-1"></i> Admin</td>
-              <td class="text-truncate">24</td>
-              <td class="text-truncate">34500$</td>
-              <td><span class="badge bg-label-warning rounded-pill">Pending</span></td>
+              <td class="text-truncate">Admin</td>
+              <td><span class="badge bg-label-success rounded-pill">Hadir</span></td>
             </tr>
-            <tr>
+            {{-- <tr>
               <td>
                 <div class="d-flex align-items-center">
                   <div class="avatar avatar-sm me-3">
@@ -750,7 +745,7 @@
               <td class="text-truncate">33</td>
               <td class="text-truncate">20500$</td>
               <td><span class="badge bg-label-secondary rounded-pill">Inactive</span></td>
-            </tr>
+            </tr> --}}
           </tbody>
         </table>
       </div>
