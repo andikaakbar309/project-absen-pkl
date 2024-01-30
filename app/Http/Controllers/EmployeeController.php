@@ -62,14 +62,14 @@ class EmployeeController extends Controller
             if (!$result) {
                 return redirect()->back()->with([
                     'status' => 'error',
-                    'message' => 'Failed to update Employee data',
+                    'message' => 'Gagal update data Pegawai',
                 ])->withInput();
             }
         }
 
         return redirect()->route('employee.index')->with([
             'status' => 'success',
-            'message' => $isEdit ? 'Successfully edited Employee data' : 'Employee data has been successfully added',
+            'message' => $isEdit ? 'Berhasil edit data Pegawai' : 'Berhasil menambah data Pegawai',
             'data' => $data
         ]);
     }

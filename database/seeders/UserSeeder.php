@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             'id' => 'dfa280e0-91f4-4e98-b4d8-0bdff05f043f',
             'name' => 'Andika',
             'username' => 'admin1',
+            'role' => 'superadmin',
             'email' => 'andika@demo.com',
             'password' => Hash::make('demo'),
             'email_verified_at' => now(),

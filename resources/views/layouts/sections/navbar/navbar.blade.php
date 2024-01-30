@@ -57,7 +57,7 @@ $navbarDetached = ($navbarDetached ?? '');
           <li class="nav-item navbar-dropdown dropdown-user dropdown">
             <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
               <div class="avatar avatar-online">
-                <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                <img src="{{ Auth::user()->avatar ?? asset('assets/img/avatars/null.jpg') }}" alt class="w-px-40 h-auto rounded-circle">
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
@@ -66,17 +66,17 @@ $navbarDetached = ($navbarDetached ?? '');
                   <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 me-2 pe-1">
                       <div class="avatar avatar-online">
-                        <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle">
+                        <img src="{{ Auth::user()->avatar ?? asset('assets/img/avatars/null.jpg') }}" alt class="w-px-40 h-auto rounded-circle">
                       </div>
                     </div>
                     <div class="flex-grow-1">
                       <h6 class="mb-0">{{ Auth::user()->name }}</h6>
-                      <small class="text-muted">Admin</small>
+                      <small class="text-muted">{{ Auth::user()->role }}</small>
                     </div>
                   </div>
                 </a>
               </li>
-              <li>
+              {{-- <li>
                 <div class="dropdown-divider my-1"></div>
               </li>
               <li>
@@ -99,7 +99,7 @@ $navbarDetached = ($navbarDetached ?? '');
                     <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
                   </span>
                 </a>
-              </li>
+              </li> --}}
               <li>
                 <div class="dropdown-divider my-1"></div>
               </li>

@@ -93,7 +93,7 @@ Route::get('/ui/typography', [Typography::class, 'index'])->name('ui-typography'
 Route::get('/extended/ui-perfect-scrollbar', [PerfectScrollbar::class, 'index'])->name('extended-ui-perfect-scrollbar');
 Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('extended-ui-text-divider');
 
-// scanner
+// scanner & employee
 Route::get('action/scanner', [ScannerController::class, 'index'])->name('scanner');
 Route::resource('/action/employee', EmployeeController::class, ['except' => ['show']]);
 Route::get('/get-users', [EmployeeController::class, 'getUsers'])->name('get-users');
