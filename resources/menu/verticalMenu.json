@@ -68,14 +68,14 @@
       ]
     },
     {
-      "name": "Manajemen Karyawan",
+      "name": "Manajemen Pegawai",
       "icon": "menu-icon tf-icons mdi mdi-account",
-      "slug": "laravel-example",
+      "slug": "employee-management",
       "submenu": [
         {
           "url": "action/employee",
-          "name": "Karyawan",
-          "slug": "employee"
+          "name": "Pegawai",
+          "slug": "employee.index"
         }
       ]
     },

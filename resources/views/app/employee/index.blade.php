@@ -21,7 +21,7 @@
 <div class="card">
     <div class="card-body">
         <a href="{{ route('employee.create') }}" class="btn btn-primary mb-3">
-            <span class="mdi mdi-plus me-2"></span> Tambah Karyawan
+            <span class="mdi mdi-plus me-2"></span> Tambah Pegawai
         </a>
         <table class="table table-striped" id="tabelku">
             <thead>

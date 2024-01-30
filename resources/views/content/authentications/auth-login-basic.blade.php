@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<div class="position-relative">
+<div class="position-relative" style="background-image: url('{{ asset('assets/img/backgrounds/6.jpg') }}'); background-size: cover; background-position: center; background-color: rgba(0, 255, 255, 0.7);">
   <div class="authentication-wrapper authentication-basic container-p-y">
     <div class="authentication-inner py-4">
 
@@ -25,7 +25,7 @@
 
         <div class="card-body mt-2">
           <h4 class="mb-2">Welcome to {{config('variables.templateName')}}! 👋</h4>
-          <p class="mb-4">Please sign-in to your account</p>
+          <p class="mb-4">Please sign-in to your account 🙏</p>
 
         <form id="formAuthentication" class="mb-3" action="{{ route('auth-login') }}" method="post">
           @csrf
@@ -62,9 +62,9 @@
         </div>
       </div>
       <!-- /Login -->
-      <img src="{{asset('assets/img/illustrations/tree-3.png')}}" alt="auth-tree" class="authentication-image-object-left d-none d-lg-block">
+      {{-- <img src="{{asset('assets/img/illustrations/sec-1.png')}}" style="width:200px; height:200px;" alt="auth-tree" class="authentication-image-object-left d-none d-lg-block">
       <img src="{{asset('assets/img/illustrations/auth-basic-mask-light.png')}}" class="authentication-image d-none d-lg-block" alt="triangle-bg">
-      <img src="{{asset('assets/img/illustrations/tree.png')}}" alt="auth-tree" class="authentication-image-object-right d-none d-lg-block">
+      <img src="{{asset('assets/img/illustrations/sec-2.png')}}" style="width:250px; height:200px;" alt="auth-tree" class="authentication-image-object-right d-none d-lg-block"> --}}
     </div>
   </div>
 </div>
