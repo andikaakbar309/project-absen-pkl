@@ -15,8 +15,10 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('name');
             $table->string('position');
-            $table->string('photo')->nullable();
-            $table->string('reasons', 2048);
+            $table->dateTime('date');
+            $table->string('status'); //hadir,sakit,izin
+            $table->string('file')->nullable();
+            $table->string('reasons', 2048)->nullable();
             $table->timestamps();
         });
     }
