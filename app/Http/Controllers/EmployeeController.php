@@ -74,10 +74,29 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function destroy($id)
+    {
+        $employee = Employee::find($id);
+
+        if (!$employee) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Employee not found.',
+            ]);
+        }
+
+        $employee->update(['is_deleted' => true]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Successfully deleted Employee.',
+        ]);
+    }
+
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
-            $data = Employee::latest()->get();
+            $data = Employee::where('is_deleted', false)->latest()->get();
     
             return DataTables::of($data)
                 ->make(true);

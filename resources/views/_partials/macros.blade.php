@@ -1,5 +1,5 @@
 @php
-$color = $color ?? '#03fcd7';
+$color = $color ?? '#0080FF';
 @endphp
 <span style="color:{{ $color }};">
   {{-- <svg width="30" height="{{ $height }}" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -14,7 +14,7 @@ $color = $color ?? '#03fcd7';
     <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="currentColor" />
     <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="white" fill-opacity="0.3" />
   </svg> --}}
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="{{ $height }}" fill="none" stroke="#9055FD" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="30" height="{{ $height }}" fill="none" stroke="#0080ff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="7" r="4" />
     <path d="M2 18c0 2.21 1.79 4 4 4h12c2.21 0 4-1.79 4-4" />
 </svg>
