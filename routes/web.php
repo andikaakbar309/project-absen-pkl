@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -97,6 +98,10 @@ Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('ex
 Route::get('action/scanner', [ScannerController::class, 'index'])->name('scanner');
 Route::resource('/action/employee', EmployeeController::class, ['except' => ['show']]);
 Route::get('/get-users', [EmployeeController::class, 'getUsers'])->name('get-users');
+
+// attendance
+Route::resource('/action/attendance', AttendanceController::class, ['except' => ['show']]);
+Route::get('/get-users', [AttendanceController::class, 'getUsers'])->name('get-users');
 
 // icons
 Route::get('/icons/icons-mdi', [MdiIcons::class, 'index'])->name('icons-mdi');
