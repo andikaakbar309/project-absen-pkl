@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -49,7 +50,6 @@ use App\Http\Controllers\UserController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    
     Route::middleware(['checkrole:superadmin,admin'])->group(function () {
         Route::resource('/user-management/user', UserController::class, ['except' => ['show']]);
         Route::get('/user-datatable', [UserController::class, 'getUsers'])->name('user-datatable');
@@ -59,6 +59,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
         Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics-user');
         Route::get('action/scanner', [ScannerController::class, 'index'])->name('scanner-user');
+        Route::resource('/action/attendance', AttendanceController::class, ['except' => ['show']]);
+        Route::get('/get-users', [AttendanceController::class, 'getUsers'])->name('get-users');
     
     // layout
     Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
@@ -101,12 +103,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // extended ui
     Route::get('/extended/ui-perfect-scrollbar', [PerfectScrollbar::class, 'index'])->name('extended-ui-perfect-scrollbar');
     Route::get('/extended/ui-text-divider', [TextDivider::class, 'index'])->name('extended-ui-text-divider');
-    
-    // scanner & employee
-    
-    
-    // user
-    
     
     // icons
     Route::get('/icons/icons-mdi', [MdiIcons::class, 'index'])->name('icons-mdi');
