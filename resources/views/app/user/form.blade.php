@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Employee')
+@section('title', 'User')
 
 @section('content')
 <style>
@@ -32,12 +32,12 @@
 </style>
 
 @php($isEdit = isset($data))
-<form action="{{ route('employee.store') }}" method="POST" enctype="multipart/form-data" id="upload-foto">
+<form action="{{ route('user.store') }}" method="POST" enctype="multipart/form-data" id="upload-foto">
     <div class="card">
         @csrf
         <div class="card-header">
             <div class="card-title">
-                <h3 class="card-title">@if($isEdit) Edit Pegawai @else Tambah Pegawai @endif </h3>
+                <h3 class="card-title">@if($isEdit) Edit User @else Tambah User @endif </h3>
             </div>
         </div>
         <div class="card-body">
@@ -47,16 +47,29 @@
                 <label for="name">Nama *</label>
             </div>
             <div class="form-floating mb-4">
-                <input type="text" class="form-control" id="position" name="position" value="{{ old('position', $data->position ?? '') }}" placeholder="" />
-                <label for="position">Posisi *</label>
+                <input type="text" class="form-control" id="username" name="username" value="{{ old('username', $data->username ?? '') }}" placeholder="" />
+                <label for="username">Username *</label>
+            </div>
+            <div class="form-floating mb-4">
+                <select class="form-control" name="role" id="role">
+                    <option value="">Pilih Role</option>
+                    <option value="superadmin" @if($isEdit) {{ old('role', $data->role) == 'superadmin' ? 'selected' : '' }} @endif>Superadmin</option>
+                    <option value="admin" @if($isEdit) {{ old('role', $data->role) == 'admin' ? 'selected' : '' }} @endif>Admin</option>
+                    <option value="user" @if($isEdit) {{ old('role', $data->role) == 'user' ? 'selected' : '' }} @endif>User</option>
+                </select>
+                <label for="role">Role *</label>
+            </div>
+            <div class="form-floating mb-4">
+                <input type="text" class="form-control" id="email" name="email" value="{{ old('email', $data->email ?? '') }}" placeholder="" />
+                <label for="email">Email *</label>
             </div>
             <div class="form-floating mb-4 mt-5">
-                <h6 class="mb-4">Photo (Opsional)</h6>
-                <input type="hidden" name="old_photo" value="{{ $data->photo ?? '' }}">
-                <input type="file" style="display:none;" name="photo" id="photo" accept="image/*" />
+                <h6 class="mb-4">Avatar (Opsional)</h6>
+                <input type="hidden" name="old_avatar" value="{{ $data->avatar ?? '' }}">
+                <input type="file" style="display:none;" name="avatar" id="avatar" accept="image/*" />
                 <div id="preview" style="position:relative;" class="d-flex flex-column justify-content-center text-center w-100">
-                    @php($photo = $isEdit && !empty($data->photo) ? asset('uploads/'.$data->photo) : asset('assets/img/avatars/null.jpg'))
-                    <img id="preview-image" style="height:220px; width:220px; border: 5px solid #c9c4c3; transition: background ease-out 200ms; align-self: center; object-fit: cover;" class="bg-pale-ash rounded @error('profile_file') is-invalid @enderror" src="{{ $photo }}" alt="preview image" />
+                    @php($avatar = $isEdit && !empty($data->avatar) ? asset('uploads/'.$data->avatar) : asset('assets/img/avatars/null.jpg'))
+                    <img id="preview-image" style="height:220px; width:220px; border: 5px solid #c9c4c3; transition: background ease-out 200ms; align-self: center; object-fit: cover;" class="bg-pale-ash rounded @error('profile_file') is-invalid @enderror" src="{{ $avatar }}" alt="preview image" />
                     <span class="fs-13 text-ash"><i class="uil uil-exclamation-circle"></i> Maks. Ukuran 2MB</span>
                     <div>
                         <button type="button" id="upload-button" class="btn btn-primary mt-2" aria-labelledby="image" aria-describedby="image">
@@ -66,16 +79,12 @@
                 </div>
             </div>
             <div class="form-floating mb-4">
-                <input type="text" class="form-control" id="address" name="address" value="{{ old('address', $data->address ?? '') }}" placeholder="" />
-                <label for="address">Alamat *</label>
-            </div>
-            <div class="form-floating mb-4">
-                <input type="number" class="form-control" id="phone_number" name="phone_number" value="{{ old('phone_number', $data->phone_number ?? '') }}" placeholder="" />
-                <label for="phone_number">No. Telp *</label>
+                <input type="password" class="form-control" id="password" name="password" value="{{ old('password', $data->password ?? '') }}" placeholder="" />
+                <label for="password">Password *</label>
             </div>
         </div>
         <div class="card-footer">
-            <a href="{{ route('employee.index') }}" class="btn btn-light btn-active-light-primary">Back</a>    
+            <a href="{{ route('user.index') }}" class="btn btn-light btn-active-light-primary">Back</a>
             
             <button type="submit" class="btn btn-primary float-end">
                 @if($isEdit) Save @else Save @endif
@@ -87,13 +96,13 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const uploadButton = document.getElementById("upload-button");
-        const photoInput = document.getElementById("photo");
+        const avatarInput = document.getElementById("avatar");
         
         uploadButton.addEventListener("click", function () {
-            photoInput.click();
+            avatarInput.click();
         });
         
-        photoInput.addEventListener("change", function () {
+        avatarInput.addEventListener("change", function () {
             const previewImage = document.getElementById("preview-image");
             const file = this.files[0];
             

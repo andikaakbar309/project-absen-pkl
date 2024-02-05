@@ -68,6 +68,9 @@
       ]
     },
     {
+      "menuHeader": "Apps & Pages"
+    },
+    {
       "name": "Manajemen Pegawai",
       "icon": "menu-icon tf-icons mdi mdi-account",
       "slug": "employee-management",
@@ -80,7 +83,16 @@
       ]
     },
     {
-      "menuHeader": "Apps & Pages"
+      "name": "User Manajemen",
+      "icon": "menu-icon tf-icons mdi mdi-account-group",
+      "slug": "user-management",
+      "submenu": [
+        {
+          "url": "user-management/user",
+          "name": "User",
+          "slug": "user.index"
+        }
+      ]
     },
     {
       "name": "Account Settings",

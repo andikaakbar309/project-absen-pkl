@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('status'); //hadir,sakit,izin
             $table->string('file')->nullable();
             $table->string('reasons', 2048)->nullable();
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

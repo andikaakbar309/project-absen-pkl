@@ -2,9 +2,9 @@
   // Variables
   return [
     "creatorName" => "Andika",
-    "creatorUrl" => "https://themeselection.com",
+    "creatorUrl" => "https://github.com/andikaakbar309",
     "templateName" => "Kehadiran",
-    "templateSuffix" => "Absensi",
+    "templateSuffix" => "Kehadiran",
     "templateVersion" => "1.0.0",
     "templateFree" => true,
     "templateDescription" => "Most Powerful & Comprehensive Bootstrap 5 HTML Admin Dashboard Template built for developers!",
