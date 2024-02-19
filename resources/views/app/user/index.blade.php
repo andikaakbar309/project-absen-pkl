@@ -75,71 +75,89 @@
                 }
             },
             {
-                targets: 4,
+                targets: 2,
                 orderable: false,
                 className: 'text-center',
                 render: function(data, type, row) {
-                    return `
-                    <div class="dropdown">
-                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"">
-                            <i class="mdi mdi-dots-vertical mdi-24px"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="user/${row.id}/edit" title="Edit">Edit</a></li>
-                            <li><a class="dropdown-item delete" data-id="${row.id}" href="#" title="Delete">Delete</a></li>
-                        </ul>
-                    </div>
-                    `}
-                },
-                ]
-            });
-            
-            $(document).on('click', '.delete', function (e) {
-                e.preventDefault();
-                
-                const id = $(this).data('id');
-                
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Apakah Anda yakin?',
-                    text: 'Data akan dihapus!',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal',
-                    customClass: {
-                        popup: 'custom-size-popup',
-                        confirmButton: 'btn btn-sm',
-                        cancelButton: 'btn btn-sm',
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: `user/${id}`, 
-                            type: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                'content')
-                            },
-                            success: function (response) {
-                                Swal.fire({
-                                    title: 'Berhasil!',
-                                    text: 'Data berhasil dihapus.',
-                                    icon: 'success',
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Gagal menghapus data.',
-                                    icon: 'error',
-                                });
-                            },
-                        });
+                    var roles = row.role;
+                    
+                    if (roles == 'employee') {
+                        return 'Employee';
+                    } else if (roles == 'admin') {
+                        return 'Admin';
+                    } else if (roles == 'superadmin') {
+                        return 'Superadmin';
+                    } else {
+                        return 'Role Tidak Diketahui';
                     }
+                }
+                },
+                {
+                    targets: 4,
+                    orderable: false,
+                    className: 'text-center',
+                    render: function(data, type, row) {
+                        return `
+                        <div class="dropdown">
+                            <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"">
+                                <i class="mdi mdi-dots-vertical mdi-24px"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="user/${row.id}/edit" title="Edit">Edit</a></li>
+                                <li><a class="dropdown-item delete" data-id="${row.id}" href="#" title="Delete">Delete</a></li>
+                            </ul>
+                        </div>
+                        `}
+                    },
+                    ]
+                });
+                
+                $(document).on('click', '.delete', function (e) {
+                    e.preventDefault();
+                    
+                    const id = $(this).data('id');
+                    
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Apakah Anda yakin?',
+                        text: 'Data akan dihapus!',
+                        showCancelButton: true,
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal',
+                        customClass: {
+                            popup: 'custom-size-popup',
+                            confirmButton: 'btn btn-sm',
+                            cancelButton: 'btn btn-sm',
+                        },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: `user/${id}`, 
+                                type: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                                },
+                                success: function (response) {
+                                    Swal.fire({
+                                        title: 'Berhasil!',
+                                        text: 'Data berhasil dihapus.',
+                                        icon: 'success',
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                },
+                                error: function (xhr, status, error) {
+                                    Swal.fire({
+                                        title: 'Error!',
+                                        text: 'Gagal menghapus data.',
+                                        icon: 'error',
+                                    });
+                                },
+                            });
+                        }
+                    });
                 });
             });
-        });
-    </script>
-    @endsection
+        </script>
+        @endsection

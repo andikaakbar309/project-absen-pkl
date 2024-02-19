@@ -54,13 +54,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('/user-management/user', UserController::class, ['except' => ['show']]);
         Route::get('/user-datatable', [UserController::class, 'getUsers'])->name('user-datatable');
         Route::resource('/action/employee', EmployeeController::class, ['except' => ['show']]);
-        Route::get('/get-users', [EmployeeController::class, 'getUsers'])->name('get-users');
+        Route::get('/employee-datatable', [EmployeeController::class, 'getUsers'])->name('employee-datatable');
     });
     
         Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics-user');
         Route::get('action/scanner', [ScannerController::class, 'index'])->name('scanner-user');
         Route::resource('/action/attendance', AttendanceController::class, ['except' => ['show']]);
-        Route::get('/get-users', [AttendanceController::class, 'getUsers'])->name('get-users');
+        Route::get('/action/attendance/detail/{id}', [AttendanceController::class, 'detail'])->name('attendance.detail');
+        Route::get('/attendance-datatable', [AttendanceController::class, 'getUsers'])->name('attendance-datatable');
     
     // layout
     Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');

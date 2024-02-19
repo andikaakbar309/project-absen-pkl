@@ -46,7 +46,7 @@
         $('#tabelku').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('get-users') }}",
+            ajax: "{{ route('employee-datatable') }}",
             lengthChange: false,
             order: [
             [4, 'desc']

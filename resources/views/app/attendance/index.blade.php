@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'attendance')
+@section('title', 'Attendance')
 
 @section('content')
 
@@ -41,12 +41,13 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
     $(document).ready(function ($) {
         $('#tabelku').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('get-users') }}",
+            ajax: "{{ route('attendance-datatable') }}",
             lengthChange: false,
             order: [
             [4, 'desc']
@@ -75,71 +76,119 @@
                 }
             },
             {
+                targets: 2,
+                orderable: false,
+                className: 'text-center',
+                render: function(data, type, row) {
+                    let badgeClass = '';
+                    let badgeText = '';
+                    
+                    switch (row.status) {
+                        case 'hadir':
+                        badgeClass = 'badge bg-success';
+                        badgeText = 'Hadir';
+                        break;
+                        case 'izin':
+                        badgeClass = 'badge bg-warning';
+                        badgeText = 'Izin';
+                        break;
+                        case 'sakit':
+                        badgeClass = 'badge bg-danger';
+                        badgeText = 'Sakit';
+                        break;
+                        default:
+                        badgeClass = 'badge bg-secondary';
+                        badgeText = 'Unknown';
+                    }
+                    
+                    return `<span class="${badgeClass}">${badgeText}</span>`;
+                }
+            },
+            {
+                targets: 3,
+                orderable: false,
+                className: 'text-center',
+                render: function(data, type, row) {
+                    let formattedDateTime = moment(data).format('DD MMMM YYYY HH:mm');
+                    
+                    return formattedDateTime;
+                }
+            },
+            {
                 targets: 4,
                 orderable: false,
                 className: 'text-center',
                 render: function(data, type, row) {
+                    var userRole = "{{ Auth::user()->role }}";
+                    
+                    var detailButton = '';
+                    if (userRole == 'admin' || userRole == 'superadmin') {
+                        detailButton = '<li><a class="dropdown-item" href="attendance/detail/' + row.id + '" title="Detail">Detail</a></li>';
+                    }
+                    
                     return `
                     <div class="dropdown">
-                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"">
+                        <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="mdi mdi-dots-vertical mdi-24px"></i>
                         </button>
                         <ul class="dropdown-menu">
+                            ${detailButton}
                             <li><a class="dropdown-item" href="attendance/${row.id}/edit" title="Edit">Edit</a></li>
                             <li><a class="dropdown-item delete" data-id="${row.id}" href="#" title="Delete">Delete</a></li>
                         </ul>
                     </div>
-                    `}
-                },
-                ]
-            });
+                    `;
+                }
+            }
+            ]
+        });
+        
+        $(document).on('click', '.delete', function (e) {
+            e.preventDefault();
             
-            $(document).on('click', '.delete', function (e) {
-                e.preventDefault();
-                
-                const id = $(this).data('id');
-                
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Apakah Anda yakin?',
-                    text: 'Data akan dihapus!',
-                    showCancelButton: true,
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal',
-                    customClass: {
-                        popup: 'custom-size-popup',
-                        confirmButton: 'btn btn-sm',
-                        cancelButton: 'btn btn-sm',
-                    },
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: `attendance/${id}`, 
-                            type: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                'content')
-                            },
-                            success: function (response) {
-                                Swal.fire({
-                                    title: 'Berhasil!',
-                                    text: 'Data berhasil dihapus.',
-                                    icon: 'success',
-                                }).then(() => {
-                                    window.location.reload();
-                                });
-                            },
-                            error: function (xhr, status, error) {
-                                Swal.fire({
-                                    title: 'Error!',
-                                    text: 'Gagal menghapus data.',
-                                    icon: 'error',
-                                });
-                            },
-                        });
-                    }
-                });
+            const id = $(this).data('id');
+            
+            Swal.fire({
+                icon: 'warning',
+                title: 'Apakah Anda yakin?',
+                text: 'Data akan dihapus!',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                customClass: {
+                    popup: 'custom-size-popup',
+                    confirmButton: 'btn btn-sm',
+                    cancelButton: 'btn btn-sm',
+                },
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `attendance/${id}`, 
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                            'content')
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: 'Data berhasil dihapus.',
+                                icon: 'success',
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Gagal menghapus data.',
+                                icon: 'error',
+                            });
+                        },
+                    });
+                }
             });
         });
-    </script>
-    @endsection
+    });
+</script>
+@endsection

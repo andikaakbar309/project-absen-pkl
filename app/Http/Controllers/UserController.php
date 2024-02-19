@@ -64,30 +64,30 @@ class UserController extends Controller
             if (!$result) {
                 return redirect()->back()->with([
                     'status' => 'error',
-                    'message' => 'Gagal update data Pegawai',
+                    'message' => 'Gagal update data User',
                 ])->withInput();
             }
         }
 
         return redirect()->route('user.index')->with([
             'status' => 'success',
-            'message' => $isEdit ? 'Berhasil edit data Pegawai' : 'Berhasil menambah data Pegawai',
+            'message' => $isEdit ? 'Berhasil edit data User' : 'Berhasil menambah data User',
             'data' => $data
         ]);
     }
 
     public function destroy($id)
     {
-        $User = User::find($id);
+        $user = User::find($id);
 
-        if (!$User) {
+        if (!$user) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'User not found.',
             ]);
         }
 
-        $User->update(['is_deleted' => true]);
+        $user->update(['is_deleted' => true]);
 
         return response()->json([
             'status' => 'success',

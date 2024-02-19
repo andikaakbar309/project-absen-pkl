@@ -55,7 +55,7 @@
                     <option value="">Pilih Role</option>
                     <option value="superadmin" @if($isEdit) {{ old('role', $data->role) == 'superadmin' ? 'selected' : '' }} @endif>Superadmin</option>
                     <option value="admin" @if($isEdit) {{ old('role', $data->role) == 'admin' ? 'selected' : '' }} @endif>Admin</option>
-                    <option value="user" @if($isEdit) {{ old('role', $data->role) == 'user' ? 'selected' : '' }} @endif>User</option>
+                    <option value="employee" @if($isEdit) {{ old('role', $data->role) == 'employee' ? 'selected' : '' }} @endif>Employee</option>
                 </select>
                 <label for="role">Role *</label>
             </div>
