@@ -10,9 +10,12 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Menjadwalkan command untuk menjalankan setiap jam 9 pagi dengan zona waktu Jakarta
+        $schedule->command('attendance:input')
+                 ->timezone('Asia/Jakarta') // Tentukan zona waktu di sini
+                 ->dailyAt('09:15');
     }
 
     /**

@@ -40,7 +40,7 @@ class AttendanceController extends Controller
             'name' => 'required',
             'date' => 'required',
             'status' => 'required',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'file' => 'nullable|file|max:20480',
             'reasons' => 'nullable'
         ];
 

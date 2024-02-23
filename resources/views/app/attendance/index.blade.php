@@ -18,24 +18,35 @@
 ])
 @endif
 
-<div class="card">
-    <div class="card-body">
-        <a href="{{ route('attendance.create') }}" class="btn btn-primary mb-3">
-            <span class="mdi mdi-plus me-2"></span> Tambah Kehadiran
-        </a>
-        <table class="table table-striped" id="tabelku">
-            <thead>
-                <tr>
-                    <th class="w-10px pe-2">No.</th>
-                    <th class="min-w-50px">Nama</th>
-                    <th class="min-w-100px">Status</th>
-                    <th class="min-w-100px">Tanggal</th>
-                    <th class="text-center min-w-100px">Action</th> 
-                </tr>
-            </thead>
-        </table>
+    @php
+    // Check if attendance for today exists for the logged-in user
+    $attendanceToday = App\Models\Attendance::where('user_id', Auth::id())->whereDate('date', today())->exists();
+    @endphp
+
+    <div class="card">
+        <div class="card-body">
+            @if (!$attendanceToday)
+            <a href="{{ route('attendance.create') }}" class="btn btn-primary mb-3">
+                <span class="mdi mdi-plus me-2"></span> Tambah Kehadiran
+            </a>
+            @else
+            <button class="btn btn-primary mb-3" disabled>
+                <span class="mdi mdi-plus me-2"></span> Tambah Kehadiran
+            </button>
+            @endif
+            <table class="table table-striped" id="tabelku">
+                <thead>
+                    <tr>
+                        <th class="w-10px pe-2">No.</th>
+                        <th class="min-w-50px">Nama</th>
+                        <th class="min-w-100px">Status</th>
+                        <th class="min-w-100px">Tanggal</th>
+                        <th class="text-center min-w-100px">Action</th> 
+                    </tr>
+                </thead>
+            </table>
+        </div>
     </div>
-</div>
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
@@ -96,9 +107,9 @@
                         badgeClass = 'badge bg-danger';
                         badgeText = 'Sakit';
                         break;
-                        default:
+                        case 'bolos':
                         badgeClass = 'badge bg-secondary';
-                        badgeText = 'Unknown';
+                        badgeText = 'Bolos';
                     }
                     
                     return `<span class="${badgeClass}">${badgeText}</span>`;

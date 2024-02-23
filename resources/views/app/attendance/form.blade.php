@@ -21,10 +21,6 @@
         position: relative;
     }
     
-    input[type="file"] {
-        display: none;
-    }
-    
     .uploaded-avatar-area {
         text-align: center;
         text-align: -webkit-center;
@@ -65,7 +61,7 @@
                 @error('status') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             
-            <div class="form-floating mb-4 mt-5" id="uploadFotoSection">
+            {{-- <div class="form-floating mb-4 mt-5" id="uploadFileSection">
                 <h6 class="mb-4">Bukti (Foto, Dokumen, Dll)</h6>
                 <input type="hidden" name="old_file" value="{{ $data->file ?? '' }}">
                 <input type="file" style="display:none;" name="file" id="file" accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
@@ -79,14 +75,20 @@
                         </button>
                     </div>
                 </div>
+            </div> --}}
+
+            <div class="form-floating mb-4 mt-5" id="uploadFileSection">
+                <h6 class="mb-4">Bukti (Foto, Dokumen, Dll)</h6>
+                <input class="form-control" type="file" name="file" id="file" accept="image/*, application/pdf, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+                @error('file') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
             
             <div class="form-floating mb-4" id="alasanField">
-                <textarea type="text" class="form-control" id="reasons" name="reasons" placeholder="" style="height: 200px">{{ old('reasons', $data->reasons ?? 'Alasan wajib diisi') }}</textarea>
+                <textarea type="text" class="form-control" id="reasons" name="reasons" placeholder="Alasan wajib diisi" style="height: 200px">{{ old('reasons', $data->reasons ?? '') }}</textarea>
             </div>
             
             <div class="form-floating mb-4" id="lateReason">
-                <textarea type="text" class="form-control" id="reasons" name="reasons" placeholder="" style="height: 200px">{{ old('reasons', $data->reasons ?? 'Keterangan wajib diisi') }}</textarea>
+                <textarea type="text" class="form-control" id="reasons" name="reasons" placeholder="Keterangan wajib diisi" style="height: 200px">{{ old('reasons', $data->reasons ?? '') }}</textarea>
             </div>
         </div>
         <div class="card-footer">
@@ -107,7 +109,7 @@
         const uploadButton = document.getElementById("upload-button");
         const fileInput = document.getElementById("file");
         const statusSelect = document.getElementById("status");
-        const uploadFotoSection = document.getElementById("uploadFotoSection");
+        const uploadFileSection = document.getElementById("uploadFileSection");
         const alasanField = document.getElementById("alasanField");
         
         uploadButton.addEventListener("click", function () {
@@ -137,15 +139,15 @@
             const selectedStatus = statusSelect.value;
             
             if (selectedStatus === "izin" || selectedStatus === "sakit") {
-                uploadFotoSection.classList.remove("hidden");
+                uploadFileSection.classList.remove("hidden");
                 alasanField.classList.remove("hidden");
             } else {
-                uploadFotoSection.classList.add("hidden");
+                uploadFileSection.classList.add("hidden");
                 alasanField.classList.add("hidden");
             }
             
             // Memanggil SweetAlert saat user memilih Hadir dan kedua field tersembunyi
-            if (selectedStatus === "hadir" && uploadFotoSection.classList.contains("hidden")) {
+            if (selectedStatus === "hadir" && uploadFileSection.classList.contains("hidden")) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses',
@@ -179,38 +181,17 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const uploadButton = document.getElementById("upload-button");
-        const fileInput = document.getElementById("file");
         const statusSelect = document.getElementById("status");
-        const uploadFotoSection = document.getElementById("uploadFotoSection");
+        const uploadFileSection = document.getElementById("uploadFileSection");
         const alasanField = document.getElementById("alasanField");
         const lateReaason = document.getElementById("lateReason");
         const dateInput = document.getElementById("date");
-        
-        uploadButton.addEventListener("click", function () {
-            fileInput.click();
-        });
         
         tinymce.init({
             selector: 'textarea',
             height: 300,
             plugins: 'link image code',
             toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code',
-        });
-        
-        fileInput.addEventListener("change", function () {
-            const previewImage = document.getElementById("preview-image");
-            const file = this.files[0];
-            
-            if (file) {
-                const reader = new FileReader();
-                
-                reader.onload = function (e) {
-                    previewImage.src = e.target.result;
-                };
-                
-                reader.readAsDataURL(file);
-            }
         });
         
         toggleFieldsBasedOnStatus();
@@ -230,10 +211,10 @@
             }
             
             if (selectedStatus === "izin" || selectedStatus === "sakit") {
-                uploadFotoSection.classList.remove("hidden");
+                uploadFileSection.classList.remove("hidden");
                 alasanField.classList.remove("hidden");
             } else {
-                uploadFotoSection.classList.add("hidden");
+                uploadFileSection.classList.add("hidden");
                 alasanField.classList.add("hidden");
             }
         }
@@ -243,6 +224,9 @@
         form.addEventListener("submit", function (event) {
             const selectedStatus = statusSelect.value;
             
+            const fileInput = document.getElementById("file");
+            const alasanField = document.getElementById("alasanField");
+            
             if ((selectedStatus === "izin" || selectedStatus === "sakit") && (!fileInput.files.length || !alasanField.value.trim())) {
                 Swal.fire({
                     icon: 'error',
@@ -251,7 +235,7 @@
                 });
                 
                 event.preventDefault();
-            } else if (selectedStatus === "hadir" && uploadFotoSection.classList.contains("hidden")) {
+            } else if (selectedStatus === "hadir" && uploadFileSection.classList.contains("hidden")) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses',
