@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('attendance', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('user_id')->index();
             $table->string('name');
-            $table->string('position');
             $table->dateTime('date');
             $table->string('status'); //hadir,sakit,izin
             $table->string('file')->nullable();
             $table->string('reasons', 2048)->nullable();
+            $table->boolean('is_deleted')->default(false);
             $table->timestamps();
         });
     }

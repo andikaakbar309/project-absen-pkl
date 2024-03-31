@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\Attendance;
 
@@ -11,6 +12,12 @@ class AttendanceController extends Controller
     public function index()
     {   
         return view('app.attendance.index');
+    }
+
+    public function detail($id)
+    {
+        $data = Attendance::with(['user'])->find($id);
+        return view('app.attendance.detail', compact('data'));
     }
 
     public function create()
@@ -32,9 +39,8 @@ class AttendanceController extends Controller
         $rules = [
             'name' => 'required',
             'date' => 'required',
-            'position' => 'required',
             'status' => 'required',
-            'file' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'file' => 'nullable|file|max:20480',
             'reasons' => 'nullable'
         ];
 
@@ -49,11 +55,11 @@ class AttendanceController extends Controller
 
         $data = [
             'name' => $request->name,
-            'position' => $request->position,
             'date' => $request->date,
             'file' => $imageUrl,
             'status' => $request->status,
             'reasons' => $request->reasons,
+            'user_id' => Auth::id(),
         ];
 
         if (!$isEdit) {
@@ -64,14 +70,14 @@ class AttendanceController extends Controller
             if (!$result) {
                 return redirect()->back()->with([
                     'status' => 'error',
-                    'message' => 'Gagal update data Pegawai',
+                    'message' => 'Gagal update data Kehadiran',
                 ])->withInput();
             }
         }
 
         return redirect()->route('attendance.index')->with([
             'status' => 'success',
-            'message' => $isEdit ? 'Berhasil edit data Pegawai' : 'Berhasil menambah data Pegawai',
+            'message' => $isEdit ? 'Berhasil edit data Kehadiran' : 'Berhasil menambah data Kehadiran',
             'data' => $data
         ]);
     }
@@ -98,7 +104,18 @@ class AttendanceController extends Controller
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
-            $data = Attendance::where('is_deleted', false)->latest()->get();
+            $user = Auth::user();
+    
+            if ($user->role == 'admin' || $user->role == 'superadmin') {
+                $data = Attendance::where('is_deleted', false)
+                    ->latest()
+                    ->get();
+            } else {
+                $data = Attendance::where('is_deleted', false)
+                    ->where('user_id', $user->id)
+                    ->latest()
+                    ->get();
+            }
     
             return DataTables::of($data)
                 ->make(true);

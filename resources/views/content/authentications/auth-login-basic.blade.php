@@ -1,6 +1,6 @@
 @extends('layouts/blankLayout')
 
-@section('title', 'Login Basic - Pages')
+@section('title', 'Login - Pages')
 
 @section('page-style')
 <!-- Page -->
@@ -24,13 +24,13 @@
         <!-- /Logo -->
 
         <div class="card-body mt-2">
-          <h4 class="mb-2">Welcome to {{config('variables.templateName')}}! 👋</h4>
-          <p class="mb-4">Please sign-in to your account 🙏</p>
+          <h4 class="mb-2">Selamat datang di {{config('variables.templateName')}}! 👋</h4>
+          <p class="mb-4">Silahkan masuk ke akun anda 🙏</p>
 
         <form id="formAuthentication" class="mb-3" action="{{ route('auth-login') }}" method="post">
           @csrf
             <div class="form-floating form-floating-outline mb-3">
-              <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" autofocus>
+              <input type="text" class="form-control" id="username" name="username" placeholder="Masukan username anda" autofocus>
               <label for="username">Username</label>
             </div>
             <div class="mb-3">
@@ -48,7 +48,7 @@
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" id="remember-me">
                 <label class="form-check-label" for="remember-me">
-                  Remember Me
+                  Ingat Saya
                 </label>
               </div>
               <a href="{{url('auth/forgot-password-basic')}}" class="float-end mb-1">

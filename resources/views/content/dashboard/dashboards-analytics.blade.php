@@ -1,6 +1,6 @@
 @extends('layouts/contentNavbarLayout')
 
-@section('title', 'Dashboard - Analytics')
+@section('title', 'Dashboard')
 
 @section('vendor-style')
 <link rel="stylesheet" href="{{asset('assets/vendor/libs/apex-charts/apex-charts.css')}}">
@@ -16,39 +16,65 @@
 
 @section('content')
 <div class="row gy-4">
-  <!-- Congratulations card -->
+  <!-- Attendance Total -->
   <div class="col-md-12 col-lg-4">
     <div class="card">
       <div class="card-body">
         <h4 class="card-title mb-4" id="greeting">Selamat datang {{ Auth::user()->name }}! 🎉</h4>
-        <h1 class="text-primary mb-1">30</h1>
+        <?php
+        // Ambil total keseluruhan data kehadiran (hadir count) dari database
+        $totalAttendance = \App\Models\Attendance::where('user_id', Auth::user()->id)->where('status', 'Hadir')->count();
+        ?>
         <p class="mb-2 pb-1">Total Kehadiranmu 💼</p>
+        <h1 class="text-primary mb-3">{{ sprintf("%02d", $totalAttendance) }}</h1>
         <a href="javascript:;" class="btn btn-sm btn-primary">Lihat Rekap</a>
       </div>
       <img src="{{asset('assets/img/icons/misc/triangle-light.png')}}" class="scaleX-n1-rtl position-absolute bottom-0 end-0" width="166" alt="triangle background">
       <img src="{{asset('assets/img/illustrations/trophy.png')}}" class="scaleX-n1-rtl position-absolute bottom-0 end-0 me-4 mb-4 pb-2" width="83" alt="view sales">
     </div>
   </div>
-  <!--/ Congratulations card -->
+  <!--/ Attendance Total -->
   
-  <!-- Transactions -->
+  <!-- Monthly Attendance -->
   <div class="col-lg-8">
     <div class="card h-100">
       <div class="card-header">
         <div class="d-flex align-items-center justify-content-between">
           <h5 class="card-title m-0 me-2">Kehadiran</h5>
-          {{-- <div class="dropdown">
-            <button class="btn p-0" type="button" id="transactionID" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              <i class="mdi mdi-dots-vertical mdi-24px"></i>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="transactionID">
-              <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
-              <a class="dropdown-item" href="javascript:void(0);">Share</a>
-              <a class="dropdown-item" href="javascript:void(0);">Update</a>
-            </div>
-          </div> --}}
         </div>
-        <p class="mt-3"><span class="fw-medium">Total 48.5% kehadiranmu</span> bulan ini 🤩</p>
+        <?php
+        // Ambil data kehadiran bulan ini dari database
+        $month = date('m');
+        $year = date('Y');
+        
+        $hadirCount = \App\Models\Attendance::where('user_id', Auth::user()->id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->where('status', 'Hadir')
+        ->count();
+        $sakitCount = \App\Models\Attendance::where('user_id', Auth::user()->id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->where('status', 'Sakit')
+        ->count();
+        $izinCount = \App\Models\Attendance::where('user_id', Auth::user()->id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->where('status', 'Izin')
+        ->count();
+        $bolosCount = \App\Models\Attendance::where('user_id', Auth::user()->id)
+        ->whereMonth('date', $month)
+        ->whereYear('date', $year)
+        ->where('status', 'Bolos')
+        ->count();
+        $totalDays = $hadirCount + $sakitCount + $izinCount + $bolosCount;
+        $attendancePercentage = ($totalDays > 0) ? ($hadirCount / $totalDays) * 100 : 0;
+        ?>
+        <?php
+        // Ganti emoji berdasarkan persentase kehadiran
+        $emoji = ($attendancePercentage < 30) ? '🖕' : '👍';
+        ?>
+        <p class="mt-3"><span class="fw-medium">Persentase Kehadiranmu <b>{{ number_format($attendancePercentage, 1) }}%</b> di bulan ini {{ $emoji }}</span></p>
       </div>
       <div class="card-body">
         <div class="row g-3">
@@ -61,20 +87,20 @@
               </div>
               <div class="ms-3">
                 <div class="small mb-1">Hadir</div>
-                <h5 class="mb-0">23</h5>
+                <h5 class="mb-0">{{ $hadirCount }}</h5>
               </div>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="d-flex align-items-center">
               <div class="avatar">
-                <div class="avatar-initial bg-secondary rounded shadow">
+                <div class="avatar-initial bg-danger rounded shadow">
                   <i class="mdi mdi-emoticon-sick-outline mdi-24px"></i>
                 </div>
               </div>
               <div class="ms-3">
                 <div class="small mb-1">Sakit</div>
-                <h5 class="mb-0">5</h5>
+                <h5 class="mb-0">{{ $sakitCount }}</h5>
               </div>
             </div>
           </div>
@@ -87,20 +113,20 @@
               </div>
               <div class="ms-3">
                 <div class="small mb-1">Izin</div>
-                <h5 class="mb-0">1</h5>
+                <h5 class="mb-0">{{ $izinCount }}</h5>
               </div>
             </div>
           </div>
           <div class="col-md-3 col-6">
             <div class="d-flex align-items-center">
               <div class="avatar">
-                <div class="avatar-initial bg-danger rounded shadow">
+                <div class="avatar-initial bg-secondary rounded shadow">
                   <i class="mdi mdi-briefcase-off-outline mdi-24px"></i>
                 </div>
               </div>
               <div class="ms-3">
                 <div class="small mb-1">Bolos</div>
-                <h5 class="mb-0">2</h5>
+                <h5 class="mb-0">{{ $bolosCount }}</h5>
               </div>
             </div>
           </div>
@@ -108,7 +134,7 @@
       </div>
     </div>
   </div>
-  <!--/ Transactions -->
+  <!--/ Monthly Attendance -->
   
   {{-- <!-- Weekly Overview Chart -->
     <div class="col-xl-4 col-md-6">
@@ -590,7 +616,7 @@
     </div>
     <!-- Deposit / Withdraw --> --}}
     
-    <!-- Data Tables -->
+  <!-- Data Tables -->
     <div class="col-12">
       <div class="card">
         <div class="table-responsive">
@@ -603,153 +629,46 @@
               </tr>
             </thead>
             <tbody>
+              <?php
+              // Ambil data kehadiran (attendance) dari pengguna yang sedang login, diurutkan berdasarkan tanggal terbaru
+              $attendances = \App\Models\Attendance::where('user_id', Auth::user()->id)
+                                                    ->orderBy('date', 'desc') // Mengurutkan berdasarkan tanggal terbaru
+                                                    ->get();
+              ?>
+              @foreach($attendances as $attendance)
               <tr>
                 <td>
                   <div class="d-flex align-items-center">
                     <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/1.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
+                      @if(Auth::user()->avatar)
+                      <img src="{{ asset('uploads/' . Auth::user()->avatar) }}" alt="Avatar" class="rounded-circle">
+                      @else
+                          <img src="{{ asset('assets/img/avatars/null.jpg') }}" alt="Avatar" class="rounded-circle">
+                      @endif               
+                  </div>
                     <div>
                       <h6 class="mb-0 text-truncate">{{ Auth::user()->name }}</h6>
-                      <small class="text-truncate">@ {{ Auth::user()->username }}</small>
+                      <small class="text-truncate"><b>@</b><b>{{ Auth::user()->username }}</b></small>
                     </div>
                   </div>
                 </td>
-                <td class="text-truncate">30 Januari 2024</td>
-                <td><span class="badge bg-label-success rounded-pill">Hadir</span></td>
-              </tr>
-              {{-- <tr>
+                <td class="text-truncate">{{ \Carbon\Carbon::parse($attendance->date)->isoFormat('D MMMM YYYY, HH:mm') }}</td>
                 <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/3.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
-                      <small class="text-truncate">@brossiter15</small>
-                    </div>
-                  </div>
+                  @php
+                  $status = ucfirst(strtolower($attendance->status)); // Mengonversi status menjadi huruf kapital
+                  $badgeColor = ($status === 'Hadir') ? 'success' : (($status === 'Sakit') ? 'danger' : (($status === 'Bolos') ? 'secondary' : 'warning'));
+                  @endphp
+                  <span class="badge bg-label-{{ $badgeColor }} rounded-pill">{{ $status }}</span>
                 </td>
-                <td class="text-truncate">estelle.Bailey10@gmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-pencil-outline text-info mdi-24px me-1"></i> Editor</td>
-                <td class="text-truncate">29</td>
-                <td class="text-truncate">64500$</td>
-                <td><span class="badge bg-label-success rounded-pill">Active</span></td>
               </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/2.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Bentlee Emblin</h6>
-                      <small class="text-truncate">@bemblinf</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">milo86@hotmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-cog-outline text-warning mdi-24px me-1"></i> Author</td>
-                <td class="text-truncate">44</td>
-                <td class="text-truncate">94500$</td>
-                <td><span class="badge bg-label-success rounded-pill">Active</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/5.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Bertha Biner</h6>
-                      <small class="text-truncate">@bbinerh</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">lonnie35@hotmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-pencil-outline text-info mdi-24px me-1"></i> Editor</td>
-                <td class="text-truncate">19</td>
-                <td class="text-truncate">4500$</td>
-                <td><span class="badge bg-label-warning rounded-pill">Pending</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/4.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Beverlie Krabbe</h6>
-                      <small class="text-truncate">@bkrabbe1d</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">ahmad_Collins@yahoo.com</td>
-                <td class="text-truncate"><i class="mdi mdi-chart-donut mdi-24px text-success me-1"></i> Maintainer</td>
-                <td class="text-truncate">22</td>
-                <td class="text-truncate">10500$</td>
-                <td><span class="badge bg-label-success rounded-pill">Active</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/7.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Bradan Rosebotham</h6>
-                      <small class="text-truncate">@brosebothamz</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">tillman.Gleason68@hotmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-pencil-outline text-info mdi-24px me-1"></i> Editor</td>
-                <td class="text-truncate">50</td>
-                <td class="text-truncate">99500$</td>
-                <td><span class="badge bg-label-warning rounded-pill">Pending</span></td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/6.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Bree Kilday</h6>
-                      <small class="text-truncate">@bkildayr</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">otho21@gmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-account-outline mdi-24px text-primary me-1"></i> Subscriber</td>
-                <td class="text-truncate">23</td>
-                <td class="text-truncate">23500$</td>
-                <td><span class="badge bg-label-success rounded-pill">Active</span></td>
-              </tr>
-              <tr class="border-transparent">
-                <td>
-                  <div class="d-flex align-items-center">
-                    <div class="avatar avatar-sm me-3">
-                      <img src="{{asset('assets/img/avatars/1.png')}}" alt="Avatar" class="rounded-circle">
-                    </div>
-                    <div>
-                      <h6 class="mb-0 text-truncate">Breena Gallemore</h6>
-                      <small class="text-truncate">@bgallemore6</small>
-                    </div>
-                  </div>
-                </td>
-                <td class="text-truncate">florencio.Little@hotmail.com</td>
-                <td class="text-truncate"><i class="mdi mdi-account-outline mdi-24px text-primary me-1"></i> Subscriber</td>
-                <td class="text-truncate">33</td>
-                <td class="text-truncate">20500$</td>
-                <td><span class="badge bg-label-secondary rounded-pill">Inactive</span></td>
-              </tr> --}}
+              @endforeach
             </tbody>
           </table>
         </div>
       </div>
     </div>
-    <!--/ Data Tables -->
+  <!--/ Data Tables -->
+
   </div>
   <script>
     // Get the current hour

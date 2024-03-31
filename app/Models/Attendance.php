@@ -10,8 +10,12 @@ class Attendance extends Model
 {
     use HasFactory;
     use HasUuids;
-
+    
     protected $guarded = ['id'];
     protected $table = 'attendance';
     
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
